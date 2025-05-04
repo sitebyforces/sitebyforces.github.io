@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>force | Cyber Coder & CS2 Booster</title>
+    <style>
+        /* Reset and Base Styles */
+        :root {
+            --blood-red: #ff0033;
+            --dark-red: #800020;
+            --black: #000000;
+            --glitch-blue: #00f0ff;
+            --vhs-fuzz: rgba(255, 0, 0, 0.1);
+            --ios-blur: rgba(28, 28, 30, 0.8);
+            --ios-card: rgba(44, 44, 46, 0.8);
+            --scrollbar-width: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Courier New', monospace, -apple-system, BlinkMacSystemFont;
+            background-color: var(--black);
+            color: white;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--dark-red) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, var(--blood-red) 0%, transparent 50%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: var(--scrollbar-width);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--blood-red), #ff3355);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#ff3355, var(--blood-red));
+        }
+
+        /* Vignette Effect */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 9995;
+        }
+
+        /* Edge Glow Effect */
+        .edge-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 200px rgba(255, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 9994;
+        }
+
+        /* Fixed Matrix Effect */
+        .matrix-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9990;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(transparent 95%, rgba(255, 0, 0, 0.1) 100%),
+                linear-gradient(90deg, transparent 95%, rgba(255, 0, 0, 0.1) 100%);
+            background-size: 4px 4px;
+        }
+
+        /* Enhanced VHS Overlay */
+        .vhs-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(255, 0, 0, 0.15) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, 
+                    rgba(255, 255, 255, 0.2) 0px, 
+                    rgba(255, 255, 255, 0.2) 1px, 
+                    transparent 2px, 
+                    transparent 6px),
+                linear-gradient(to right,
+                    rgba(0, 240, 255, 0.08),
+                    rgba(255, 0, 0, 0.08),
+                    rgba(0, 240, 255, 0.08));
+            pointer-events: none;
+            z-index: 9996;
+            mix-blend-mode: overlay;
+            opacity: 0.35;
+            animation: vhs-flicker 0.1s infinite alternate, vhs-color-shift 5s infinite;
+        }
+
+        /* CRT Curvature Effect */
+        .crt-curve {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9994;
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA5SURBVGhD7cExAQAwDMCg+zfd2VAk4JVPvZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSfqyA9zQA6mS4w1FAAAAAElFTkSuQmCC');
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 9993;
+        }
+
+        /* Flash Effects */
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0;
+            mix-blend-mode: overlay;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 120px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding-top: 3rem;
+        }
+
+        .glitch {
+            position: relative;
+            font-weight: 800;
+            font-size: 6rem;
+            color: var(--blood-red);
+            text-shadow: 0 0 25px var(--dark-red);
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+            animation: text-glitch 5s infinite alternate;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 4px;
+            text-shadow: -4px 0 var(--glitch-blue);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -4px;
+            text-shadow: -4px 0 var(--dark-red);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.85;
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            margin-top: 1.5rem;
+            animation: text-flicker 3s infinite alternate;
+        }
+
+        .tagline::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood-red), transparent);
+            opacity: 0.8;
+            animation: line-pulse 2s infinite;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--ios-card);
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(255, 0, 0, 0.5);
+            border-color: var(--blood-red);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+            animation: shine 3s infinite;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            color: white;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 70%;
+            height: 5px;
+            background: var(--blood-red);
+            border-radius: 5px;
+            box-shadow: 0 0 20px var(--blood-red);
+            animation: line-glow 2s infinite alternate;
+        }
+
+        /* Skill List */
+        .skill-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .skill-item {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 700;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+        }
+
+        .skill-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                var(--blood-red))
+            );
+            transform: rotate(30deg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+            transform: translateY(-8px);
+        }
+
+        .skill-item:hover::before {
+            opacity: 0.5;
+            animation: shine 2s ease;
+        }
+
+        /* Project Grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            padding: 2.5rem;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.4);
+            border-color: var(--blood-red);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: white;
+            position: relative;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .project-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--blood-red);
+            box-shadow: 0 0 15px var(--blood-red);
+            transition: width 0.5s ease;
+        }
+
+        .project-card:hover .project-title::after {
+            width: 100px;
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tech-tag {
+            background: rgba(255, 0, 0, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.4);
+        }
+
+        .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: all 1s ease;
+        }
+
+        .tech-tag:hover {
+            background: rgba(255, 0, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .tech-tag:hover::before {
+            left: 100%;
+        }
+
+        /* Boosting Stats */
+        .boosting-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.2),
+                transparent
+            );
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.4);
+            border-color: var(--blood-red);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+            animation: shine 3s infinite;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--blood-red);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--dark-red);
+            transition: all 0.5s ease;
+        }
+
+        .stat-card:hover .stat-value {
+            transform: scale(1.1);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        /* Enhanced CTA Banner */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--black), var(--dark-red));
+            border-radius: 20px;
+            padding: 5rem 3rem;
+            text-align: center;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--blood-red);
+            animation: pulse 3s infinite;
+            box-shadow: 0 30px 60px rgba(255, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.2),
+                transparent
+            );
+            z-index: -1;
+            animation: shine-banner 8s infinite;
+        }
+
+        .cta-banner::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            border-radius: 25px;
+            z-index: -1;
+            animation: border-pulse 4s infinite;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 20px var(--dark-red);
+        }
+
+        .cta-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 4px;
+            background: var(--blood-red);
+            border-radius: 4px;
+            box-shadow: 0 0 30px var(--blood-red);
+            animation: line-glow 2s infinite alternate;
+        }
+
+        .cta-subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            letter-spacing: 2px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .telegram-link {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--blood-red), #ff3355);
+            color: white;
+            padding: 1.2rem 4rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6);
+            font-size: 1.1rem;
+        }
+
+        .telegram-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: all 1s ease;
+            z-index: -1;
+        }
+
+        .telegram-link:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(255, 0, 0, 0.8);
+            background: linear-gradient(45deg, #ff3355, var(--blood-red));
+            letter-spacing: 4px;
+        }
+
+        .telegram-link:hover::before {
+            left: 100%;
+        }
+
+        /* Binary Code Animation */
+        .binary-code {
+            position: absolute;
+            color: rgba(255, 0, 0, 0.5);
+            font-family: monospace;
+            font-size: 1.2rem;
+            z-index: 0;
+            animation: binary-fall linear forwards;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+            opacity: 0;
+        }
+
+        /* Hover Highlight */
+        .highlight {
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--blood-red);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .highlight:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Corner Decoration */
+        .corner-decoration {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--blood-red);
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        .corner-tl {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            animation: corner-glitch 4s infinite;
+        }
+
+        .corner-tr {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            animation: corner-glitch 4s infinite 1s;
+        }
+
+        .corner-bl {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            animation: corner-glitch 4s infinite 2s;
+        }
+
+        .corner-br {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            animation: corner-glitch 4s infinite 3s;
+        }
+
+        /* Footer Styles */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: var(--blood-red);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 0.7;
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(112px, 9999px, 76px, 0); }
+            40% { clip: rect(75px, 9999px, 107px, 0); }
+            60% { clip: rect(98px, 9999px, 79px, 0); }
+            80% { clip: rect(46px, 9999px, 99px, 0); }
+            100% { clip: rect(82px, 9999px, 102px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 119px, 0); }
+            20% { clip: rect(34px, 9999px, 97px, 0); }
+            40% { clip: rect(88px, 9999px, 82px, 0); }
+            60% { clip: rect(54px, 9999px, 61px, 0); }
+            80% { clip: rect(112px, 9999px, 90px, 0); }
+            100% { clip: rect(22px, 9999px, 33px, 0); }
+        }
+
+        @keyframes text-glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+        }
+
+        @keyframes text-flicker {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.8); }
+            70% { box-shadow: 0 0 0 30px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        @keyframes border-pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        @keyframes shine {
+            0% { opacity: 0; transform: rotate(30deg) translate(-30%, -30%); }
+            50% { opacity: 0.6; }
+            100% { opacity: 0; transform: rotate(30deg) translate(30%, 30%); }
+        }
+
+        @keyframes shine-banner {
+            0% { transform: translateX(-100%) skewX(-30deg); opacity: 0; }
+            5% { opacity: 0.6; }
+            100% { transform: translateX(200%) skewX(-30deg); opacity: 0; }
+        }
+
+        @keyframes vhs-flicker {
+            0% { opacity: 0.3; }
+            10% { opacity: 0.4; }
+            20% { opacity: 0.3; }
+            30% { opacity: 0.5; }
+            40% { opacity: 0.3; }
+            50% { opacity: 0.2; }
+            60% { opacity: 0.3; }
+            70% { opacity: 0.4; }
+            80% { opacity: 0.3; }
+            90% { opacity: 0.2; }
+            100% { opacity: 0.3; }
+        }
+
+        @keyframes vhs-color-shift {
+            0% { filter: hue-rotate(0deg); }
+            20% { filter: hue-rotate(5deg); }
+            40% { filter: hue-rotate(-3deg); }
+            60% { filter: hue-rotate(7deg); }
+            80% { filter: hue-rotate(-4deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+
+        @keyframes binary-fall {
+            0% { transform: translateY(-50px); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes line-glow {
+            0%, 100% { box-shadow: 0 0 15px var(--blood-red); }
+            50% { box-shadow: 0 0 30px var(--blood-red); }
+        }
+
+        @keyframes line-pulse {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(1.2); }
+        }
+
+        @keyframes corner-glitch {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glitch {
+                font-size: 4rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+                letter-spacing: 0.3em;
+            }
+            
+            .skill-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .boosting-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Visual Effects Layers -->
+    <div class="vignette"></div>
+    <div class="edge-glow"></div>
+    <div class="matrix-effect"></div>
+    <div class="vhs-overlay"></div>
+    <div class="crt-curve"></div>
+    <div class="noise"></div>
+    <div class="flash" id="global-flash"></div>
+
+    <!-- Corner Decorations -->
+    <div class="corner-decoration corner-tl"></div>
+    <div class="corner-decoration corner-tr"></div>
+    <div class="corner-decoration corner-bl"></div>
+    <div class="corner-decoration corner-br"></div>
+
+    <main class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="glitch" data-text="force">force</h1>
+            <p class="tagline">CYBER CODING & CS2 BOOSTING</p>
+        </header>
+
+        <!-- About Section -->
+        <section class="card">
+            <h2 class="section-title">ABOUT ME</h2>
+            <div class="bio">
+                <p>
+                    I'm a <span class="highlight">cyber developer</span> with <span class="highlight">1 year</span> of experience in crafting high-performance code and system exploits. 
+                    My expertise lies in reverse engineering, automation, and game hacking.
+                </p>
+                <p style="margin-top: 1.5rem;">
+                    When I'm not penetrating digital systems, I dominate the Counter Strike 2 competitive scene, 
+                    offering elite boosting services with guaranteed results and complete anonymity.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="card">
+            <h2 class="section-title">CORE EXPERTISE</h2>
+            <ul class="skill-list">
+                <li class="skill-item">PYTHON</li>
+                <li class="skill-item">C++</li>
+                <li class="skill-item">REVERSE ENGINEERING</li>
+                <li class="skill-item">GAME HACKING</li>
+                <li class="skill-item">TELEGRAM BOTS</li>
+                <li class="skill-item">AUTOMATION</li>
+                <li class="skill-item">MEMORY MANIPULATION</li>
+                <li class="skill-item">CS2 BOOSTING</li>
+            </ul>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="card">
+            <h2 class="section-title">RECENT WORKS</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3 class="project-title">CS2 Rank Booster</h3>
+                    <p class="project-description">
+                        Automated system for managing CS2 boosting operations with secure client dashboard and real-time progress tracking. Features include automated matchmaking, performance analytics, and secure payment integration.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Telegram API</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3 class="project-title">Memory Hack Framework</h3>
+                    <p class="project-description">
+                        Low-level memory manipulation library for game hacking applications with pattern scanning, hooking mechanisms, and direct memory access. Supports multiple game engines and anti-cheat bypass techniques.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">WinAPI</span>
+                        <span class="tech-tag">x86 Assembly</span>
+                        <span class="tech-tag">Cheat Engine</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3 class="project-title">Auto-Trading System</h3>
+                    <p class="project-description">
+                        Algorithmic trading bot with technical analysis indicators, risk management modules, and machine learning for market prediction. Supports multiple exchanges and trading pairs with backtesting capabilities.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Binance API</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">TA-Lib</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Boosting Section -->
+        <section class="card">
+            <h2 class="section-title">ELITE BOOSTING SERVICE</h2>
+            <div class="boosting-stats">
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Undetectable</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Availability</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">Fast</div>
+                    <div class="stat-label">Delivery</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">Secure</div>
+                    <div class="stat-label">Transactions</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coding Philosophy Section -->
+        <section class="card">
+            <h2 class="section-title">CODING PHILOSOPHY</h2>
+            <div class="bio">
+                <p>
+                    I believe in writing code that's as sharp and efficient as possible. Every line must serve a purpose, 
+                    and every algorithm must be optimized for maximum performance.
+                </p>
+                <p style="margin-top: 1.5rem;">
+                    My approach combines technical excellence with creative problem-solving, allowing me to tackle complex 
+                    challenges and deliver innovative solutions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Boosting Methodology Section -->
+        <section class="card">
+            <h2 class="section-title">BOOSTING METHODOLOGY</h2>
+            <div class="bio">
+                <p>
+                    My CS2 boosting service uses a combination of advanced gameplay techniques and strategic analysis to 
+                    ensure consistent results without resorting to detectable cheats or hacks.
+                </p>
+                <p style="margin-top: 1.5rem;">
+                    Each boost is customized to the client's specific needs, with regular updates and complete transparency 
+                    throughout the process.
+                </p>
+            </div>
+        </section>
+
+        <!-- Enhanced CTA Banner -->
+        <div class="cta-banner">
+            <div class="binary-code" style="left: 10%; top: 10%; animation-duration: 15s;"></div>
+            <div class="binary-code" style="left: 30%; top: 5%; animation-duration: 12s;"></div>
+            <div class="binary-code" style="left: 70%; top: 15%; animation-duration: 18s;"></div>
+            <div class="binary-code" style="left: 85%; top: 8%; animation-duration: 14s;"></div>
+            
+            <h2 class="cta-title">READY TO DOMINATE?</h2>
+            <p class="cta-subtitle">
+                Join the elite ranks of cyber coders and CS2 champions. Contact me now for high-performance 
+                coding solutions or premium boosting services that guarantee results.
+            </p>
+            <a href="https://t.me/yourtelegram" class="telegram-link">
+                <span>CONNECT ON TELEGRAM</span>
+            </a>
+            
+            <div class="binary-code" style="left: 15%; top: 80%; animation-duration: 16s;"></div>
+            <div class="binary-code" style="left: 45%; top: 85%; animation-duration: 13s;"></div>
+            <div class="binary-code" style="left: 65%; top: 75%; animation-duration: 19s;"></div>
+            <div class="binary-code" style="left: 90%; top: 82%; animation-duration: 11s;"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Copyright &copy; Force 2025. All rights reserved.</p>
+            <p>Website developed by <a href="https://chadwy.xyz" target="_blank">chadwy.xyz</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Create binary rain elements
+        function createBinaryRain() {
+            const binary = document.createElement('div');
+            binary.className = 'binary-code';
+            
+            // Generate random binary string
+            let binaryString = '';
+            const length = 10 + Math.floor(Math.random() * 15);
+            for (let i = 0; i < length; i++) {
+                binaryString += Math.random() > 0.5 ? '1' : '0';
+                binaryString += ' ';
+            }
+            
+            binary.textContent = binaryString;
+            binary.style.left = `${Math.random() * 100}%`;
+            binary.style.top = '-50px';
+            binary.style.animationDuration = `${10 + Math.random() * 15}s`;
+            binary.style.opacity = '0.5';
+            
+            document.body.appendChild(binary);
+            
+            // Start animation
+            setTimeout(() => {
+                binary.style.opacity = '0.5';
+            }, 50);
+            
+            // Remove after animation
+            setTimeout(() => {
+                binary.remove();
+            }, 20000);
+        }
+        
+        // Initialize binary rain
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                createBinaryRain();
+            }, i * 1500);
+        }
+        
+        // Random Flash Effects
+        const triggerRandomFlash = () => {
+            const flash = document.getElementById('global-flash');
+            flash.style.opacity = '0.5';
+            flash.style.background = `hsl(${Math.random() * 60}, 100%, 85%)`;
+            
+            setTimeout(() => {
+                flash.style.opacity = '0';
+            }, 100);
+        };
+
+        // Create random glitch lines
+        const createGlitchLine = () => {
+            const line = document.createElement('div');
+            line.className = 'glitch-line';
+            line.style.left = '0';
+            line.style.top = `${Math.random() * 100}vh`;
+            line.style.width = `${Math.random() * 100}%`;
+            line.style.height = `${Math.random() * 3 + 1}px`;
+            line.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            
+            document.body.appendChild(line);
+            
+            setTimeout(() => {
+                line.remove();
+            }, 3000);
+        };
+
+        // Initialize Effects
+        window.onload = () => {
+            // Random flashes
+            setInterval(triggerRandomFlash, 2000);
+            
+            // Glitch lines
+            setInterval(createGlitchLine, 300);
+            
+            // Continuous binary rain
+            setInterval(createBinaryRain, 1000);
+            
+            // Noise animation
+            const noise = document.querySelector('.noise');
+            let noisePos = 0;
+            setInterval(() => {
+                noisePos += 3;
+                noise.style.backgroundPosition = `${noisePos}px ${noisePos}px`;
+            }, 30);
+        };
+
+        // Click effects
+        document.addEventListener('click', (e) => {
+            triggerRandomFlash();
+        });
+
+        // Scroll effects
+        window.addEventListener('scroll', () => {
+            // Occasionally trigger flash when scrolling
+            if (Math.random() > 0.6) {
+                triggerRandomFlash();
+            }
+            
+            // Add subtle VHS distortion on scroll
+            const vhsOverlay = document.querySelector('.vhs-overlay');
+            vhsOverlay.style.transform = `translateY(${window.scrollY * 0.3}px) rotate(${Math.sin(window.scrollY * 0.01) * 0.5}deg)`;
+        });
+    </script>
+</body>
+</html>
