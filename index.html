@@ -2,376 +2,456 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TvArH_PrO_2013 OFFICIAL PAGE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TvArH_VZLOM_2025_OFFICIAL</title>
 <style>
-  /* === ТЕХНИЧЕСКИЙ АД === */
+  /* === ГЛОБАЛЬНЫЙ СТИЛЬ (ГРЯЗЬ) === */
   * {
-    cursor: url('https://cdn-icons-png.flaticon.com/512/62/62808.png'), crosshair; /* Курсор прицел */
+    box-sizing: border-box;
+    cursor: url('https://cdn-icons-png.flaticon.com/512/62/62808.png'), crosshair;
   }
   
   body {
-    background-color: #0000aa; /* Темно-синий, чтобы давило на психику */
-    color: #ff0000; /* Ярко-красный текст */
-    
-    /* === ГРЯЗНЫЙ ARIAL === */
-    font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
-    font-weight: 900; /* Максимальная жирнота */
-    letter-spacing: -2px; /* Буквы слиплись */
-    line-height: 0.9; /* Строки наезжают друг на друга */
-    text-shadow: 2px 2px 0px #000000; /* Грубая черная тень */
-    /* ==================== */
-    
+    background-color: #0000aa; /* Синий экран смерти */
+    color: red;
+    font-family: "Arial Black", Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 0;
     overflow-x: hidden;
-    user-select: none; /* ЗАПРЕТ ВЫДЕЛЕНИЯ */
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    padding-bottom: 150px;
   }
 
-  /* СЛЕД ЗА МЫШКОЙ */
-  .trail {
-    position: absolute;
-    height: 15px; width: 15px;
-    background: lime; /* Кислотный квадрат */
-    pointer-events: none;
-    font-size: 10px;
-    color: black;
-    border: 1px solid white;
-    z-index: 1000;
+  /* === 1. ЭКРАН СО ЗНАКОМ СТОП (ИНТРО) === */
+  #INTRO-SCREEN {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: black; z-index: 100000000;
+      display: flex; justify-content: center; align-items: center;
+      overflow: hidden;
+  }
+  #stop-img {
+      width: 0px; 
+      transition: all 2.5s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+  }
+  .zoom-active {
+      width: 300vw !important; 
+      transform: rotate(720deg);
   }
 
-  h1 {
-    font-size: 90px; /* Гигантский шрифт */
-    text-shadow: 5px 5px 0px yellow;
-    animation: shake 0.3s infinite;
-    transform: scaleX(0.8); /* Сплюснул заголовок */
+  /* === 2. ЭКРАН ПОМОЙКИ (ЕСЛИ ПРОИГРАЛ) === */
+  #TRASH-SCREEN {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: black; z-index: 99999999; display: none;
+    text-align: center; color: white; padding-top: 50px;
   }
 
-  h2 {
-    background: yellow;
-    color: blue;
-    display: inline-block;
-    padding: 5px;
-    transform: rotate(-2deg);
+  /* === 3. КОЛЕСО ФОРТУНЫ === */
+  #WHEEL-OVERLAY {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); z-index: 90000000;
+    display: none; 
+    flex-direction: column; justify-content: center; align-items: center;
+  }
+  .wheel-container {
+    position: relative; width: 300px; height: 300px;
+    border: 5px solid white; border-radius: 50%; overflow: hidden;
+    box-shadow: 0 0 50px red;
+  }
+  .the-wheel {
+    width: 100%; height: 100%;
+    background: conic-gradient(red 0% 50%, lime 50% 100%);
+    border-radius: 50%;
+    transition: transform 4s ease-out;
+  }
+  .pointer {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 20px solid transparent; border-right: 20px solid transparent;
+    border-top: 40px solid yellow; z-index: 10;
+  }
+  .spin-btn {
+    margin-top: 30px; padding: 20px; font-size: 30px;
+    background: gold; border: 5px outset orange; color: black;
+    animation: pulse 0.5s infinite;
   }
 
-  .block-cringe {
-    border: 20px ridge #00ff00; /* Толстенная рамка */
-    background-color: #1a1a1a;
-    margin: 20px;
-    padding: 15px;
-    box-shadow: 15px 15px 0px red;
-  }
-
-  .krutoy-text {
-    font-size: 45px;
-    color: #00ff00;
-    background: #440044;
-    border: 5px dotted white;
-    font-family: Arial, sans-serif; /* Тут обычный ариал, чтоб контраст бесил */
-    font-weight: bold;
-  }
-
-  img {
-    border: 10px solid red;
-    max-width: 90%;
-  }
-
-  /* СТИЛИ ДЛЯ ОКНА РЕКЛАМЫ (WINDOWS 98 STYLE) */
-  #POPUP-AD {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 450px;
-    background: #c0c0c0;
-    border: 5px outset white;
-    box-shadow: 30px 30px 0px black;
-    z-index: 999999;
-    display: none;
-    text-align: center;
-    padding: 5px;
-    font-family: Arial, sans-serif; /* В окне винды обычный шрифт */
-    letter-spacing: normal;
-    text-shadow: none;
-    color: black;
-  }
+  /* === ОСНОВНОЙ КОНТЕНТ === */
   
-  .win-header {
-    background: linear-gradient(to right, navy, blue);
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-    text-align: left;
-    font-family: Tahoma, sans-serif;
+  /* Матрица */
+  .matrix-sidebar {
+      position: fixed; left: 0; top: 0; width: 25px; height: 100%;
+      background: black; color: #0f0; font-size: 10px;
+      writing-mode: vertical-rl; text-align: center; z-index: 50;
+      border-right: 2px solid lime; opacity: 0.8; pointer-events: none;
   }
 
-  .ad-content img {
-    width: 300px;
-    height: 250px;
-    object-fit: cover;
-    border: 3px inset gray;
-    margin-top: 10px;
+  /* Долг */
+  .debt-counter {
+      position: fixed; top: 5px; right: 5px;
+      background: red; color: yellow; border: 3px solid white;
+      padding: 5px; font-weight: bold; z-index: 200; font-size: 14px;
+      box-shadow: 5px 5px 0px black;
   }
 
-  /* БЕГУЩАЯ КНОПКА */
+  /* Снайпер */
+  #SNIPER-SCREEN {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 8000; display: none;
+    animation: police-flash 0.1s infinite; text-align: center;
+  }
+  .scope-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('https://png.pngtree.com/png-vector/20221016/ourlarge/pngtree-sniper-scope-sight-view-png-image_6301959.png');
+    background-size: cover; background-position: center; pointer-events: none; opacity: 0.9;
+  }
+  .sniper-content { position: relative; top: 25%; z-index: 100; padding: 10px; }
+
+  /* Реклама */
+  #POPUP-AD {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 90%; max-width: 400px; background: #c0c0c0; border: 6px outset white;
+    box-shadow: 20px 20px 0px black; z-index: 6000; display: none;
+    text-align: center; padding: 5px;
+  }
+
+  /* Блоки с текстом */
+  .cringe-block {
+    border: 8px ridge #00ff00; background: #111; margin: 15px auto; 
+    padding: 10px; width: 95%; position: relative;
+    box-shadow: 8px 8px 0px #550055;
+  }
+
+  /* Кнопка ПОЖАЛОВАТЬСЯ */
   #runaway-btn {
-    position: absolute;
-    font-size: 25px;
+    font-size: 20px;
     background: red;
     color: white;
-    font-family: "Arial Black", sans-serif;
     border: 5px solid yellow;
-    cursor: not-allowed;
+    padding: 10px;
+    position: fixed; /* Чтобы всегда была видна и бегала по экрану */
+    bottom: 20px;
+    left: 40%;
+    z-index: 500;
   }
 
-  /* ФЕЙК ЗАГРУЗКА */
-  .virus-bar {
-    width: 100%;
-    background: grey;
-    border: 4px solid white;
-    height: 40px;
-    margin-top: 10px;
-  }
-  .virus-progress {
-    height: 100%;
-    background: repeating-linear-gradient(45deg, lime, lime 10px, green 10px, green 20px);
-    width: 1%;
-    transition: width 0.2s;
-  }
+  /* Элементы */
+  button { font-family: "Arial Black", Arial, sans-serif; cursor: pointer; font-weight: 900; }
+  img { max-width: 100%; border: 3px solid red; }
+  h1 { text-shadow: 4px 4px 0px yellow; font-size: 40px; margin: 10px 0; line-height: 0.9; }
 
-  @keyframes shake {
-    0% { transform: translate(2px, 2px) rotate(0deg); }
-    25% { transform: translate(-2px, -3px) rotate(-1deg); }
-    50% { transform: translate(3px, 0px) rotate(1deg); }
-    75% { transform: translate(-3px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  /* Анимации */
+  @keyframes police-flash {
+    0% { background-color: rgba(255, 0, 0, 0.4); }
+    50% { background-color: rgba(0, 0, 255, 0.4); }
   }
-  
-  /* Мерцание текста */
-  .blink {
-    animation: blinker 0.1s linear infinite;
-  }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .blink { animation: blinker 0.1s linear infinite; }
   @keyframes blinker { 50% { opacity: 0; } }
-
+  
+  /* СЛЕД МЫШКИ */
+  .trail {
+      position: absolute; width: 15px; height: 15px; background: lime;
+      pointer-events: none; z-index: 999; border: 1px solid white;
+  }
 </style>
 </head>
 
-<!-- ЗАПРЕТ ПРАВОЙ КНОПКИ МЫШИ -->
-<body oncontextmenu="alert('⚠️ ERROR 404: КОПИРОВАНИЕ ЗАПРЕЩЕНО АДМИНИСТРАЦИЕЙ ⚠️'); return false;" onload="siteLoad()">
+<!-- ЗАПУСК ПРИ ЗАГРУЗКЕ -->
+<body onload="startIntro()">
 
-<!-- === ВСПЛЫВАЮЩЕЕ ОКНО РЕКЛАМЫ === -->
-<div id="POPUP-AD">
-    <div class="win-header">
-        SYSTEM ERROR: CRITICAL VIRUS FOUND
-    </div>
-    <div class="ad-content">
-        <br>
-        <font color="red" size="5"><b>СРОЧНО КУПИТЕ ЭТО:</b></font><br>
-        
-        <!-- СЮДА СКРИПТ ВСТАВИТ РАНДОМ ФОТКУ -->
-        <img id="ad-img-placer" src="">
-        
-        <p id="ad-text-placer" style="font-weight: bold; font-size: 20px;">Текст...</p>
-        
-        <button style="width: 120px; height: 40px; font-weight: bold;" onclick="closeAd()">[X] ОТМЕНА</button>
-        <button style="width: 120px; height: 40px; font-weight: bold; color: red;" onclick="alert('СПАСИБО ЗА ПОКУПКУ ЛОХ')">КУПИТЬ</button>
-    </div>
+<!-- === 1. ИНТРО СТОП (ПРИБЛИЖЕНИЕ) === -->
+<div id="INTRO-SCREEN">
+    <img id="stop-img" src="https://ondoclub.ru/wp-content/uploads/znaki-stop-pdd_3.jpg">
 </div>
-<!-- ================================= -->
 
-<center>
-  <!-- БЕГУЩАЯ СТРОКА С ЖИРНЫМ ARIAL -->
-  <marquee scrollamount="30" bgcolor="#ffff00" style="font-size: 60px; color: #ff00ff; border-bottom: 5px solid black;">
-    ВНИМАНИЕ!!! ВЗЛОМ СЕРВЕРОВ STANDOFF 2 /// РАЗДАЧА ГОЛДЫ БЕСПЛАТНО /// ЗАХОДИ ПОКА НЕ ЗАБАНИЛИ
-  </marquee>
-  
-  <br>
-  <h1 id="nick">>>> TvArH_PrO <<<</h1>
-  
-  <div style="background: white; color: black; padding: 5px; display: inline-block; border: 3px solid black;">
-    ХАКЕР / 2013 / СНАЙПЕР / АДМИН
-  </div>
-
-  <br><br>
-
-  <!-- СЕКЦИЯ БАННЕРОВ -->
-  <div style="background: #000; padding: 15px; border: 5px dashed white;">
-    <font color="lime" size="5">ПАРТНЕРЫ САЙТА:</font><br><br>
-    <button style="background:lime; font-size: 25px; font-family: 'Arial Black';" onclick="alert('ВИРУС.ЕХЕ ЗАПУЩЕН')">СКАЧАТЬ<br>ЧИТ НА ВХ</button>
-    &nbsp;&nbsp;
-    <button style="background:magenta; font-size: 25px; font-family: 'Arial Black';" onclick="alert('МАЙНКРАФТ УДАЛЕН')">ГОЛДА<br>БЕСПЛАТНО</button>
-  </div>
-
-  <br>
-  
-  <div class="block-cringe">
-    <p class="krutoy-text">Аэы я лблю играт в стэндофф</p>
-    <br>
-    <font size="6" color="white" style="font-family: Arial;">
-      <b>Всем привет седня я раскажу пачему я самый крутой в СТАНДОФЕ.</b><br>
-      во первых у миня КД 0.32 это очнь много (мой друг саня завидует)<br>
-      во вторых у меня есть СКИН КАЛАШ (дефолтный но я наклеел наклейку)!!!!
-    </font>
-    
+<!-- === 2. ЭКРАН ПОМОЙКИ (GAME OVER) === -->
+<div id="TRASH-SCREEN">
+    <h1 style="color: red; font-size: 50px;">ТЫ В МУСОРКЕ!!</h1>
+    <h2 style="color: white;">УДАЛЯЙ БРАУЗЕР</h2>
+    <img src="https://kartinki.pics/uploads/posts/2021-07/1625834013_27-kartinkin-com-p-pomoika-oboi-krasivie-30.jpg" style="width: 90%; border: 10px solid lime;">
     <br><br>
-    <!-- ФЕЙК ЗАГРУЗКА -->
-    <font color="red" size="5" class="blink">ВЗЛОМ ПЕНТАГОНА:</font>
-    <div class="virus-bar">
-        <div id="progress" class="virus-progress"></div>
+    <button onclick="alert('НЕЛЬЗЯ ВЫЙТИ АХАХА')" style="font-size: 30px;">ВЫХОД</button>
+</div>
+
+<!-- === 3. КОЛЕСО ФОРТУНЫ === -->
+<div id="WHEEL-OVERLAY">
+    <h1 style="color: gold; text-align: center;">КРУТИ ИЛИ БАН</h1>
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div id="theWheel" class="the-wheel"></div>
+        <div style="position: absolute; top: 50px; left: 60px; color: black; font-weight: bold; font-size: 20px;">БАН</div>
+        <div style="position: absolute; bottom: 50px; right: 50px; color: black; font-weight: bold; font-size: 20px;">ВХОД</div>
     </div>
-    <div id="hack-text" style="color: lime; font-size: 20px;">инициализация...</div>
-  </div>
+    <button id="spinBtn" class="spin-btn" onclick="spinWheel()">ИСПЫТАТЬ УДАЧУ</button>
+</div>
 
-  <h1 style="font-size: 60px; color: white;">МОИ ФОТКИ (РЕАЛ)</h1>
-  
-  <!-- ФОТКА 1 -->
-  <div style="background: orange; padding: 10px; width: 80%;">
-      <img src="https://i.ytimg.com/vi/gAGMqD9zuf0/maxresdefault.jpg">
-      <br>
-      <font size="6" color="black" style="background: white;">ЭТО Я ЗДЕЛАЛ ЭЙС (НЕ ФОТОШОП)</font>
-  </div>
-  
-  <br><br>
-  
-  <!-- ФОТКА 2 (NO IMAGE) -->
-  <div style="background: grey; padding: 10px; width: 60%;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg">
-      <p style="color: black;">тут короче фотка с моим прессом но она не грузит((</p>
-  </div>
-  
-  <br><br>
-  
-  <!-- ФОТКА 3 -->
-  <div style="background: lime; padding: 10px; width: 80%;">
-      <img src="https://i.ytimg.com/vi/3E1Zxz1lnuc/maxresdefault.jpg">
-      <p style="color: black; font-size: 30px;">Ета я унизил школьника на ножах ахахах )))</p>
-  </div>
 
-  <br><br>
+<!-- === 4. ОСНОВНОЙ КОНТЕНТ (СКРЫТ) === -->
+<div id="MAIN-SITE" style="display: none;">
 
-  <div class="block-cringe" style="background: #550000; border-color: yellow;">
-    <h2 class="blink">!! ВАЖНО !!</h2>
-    <p style="font-size: 35px; color: yellow;">
-      ЕСЛИ ТЫ НЕ СКИНИШЬ МНЕ ГОЛДУ ПРЯМО ЩАС <br>
-      Я ВЫЧИСЛЮ ТВОЙ АДРЕС ПО IP <br>
-      МОЙ БАТЯ РАБОТАЕТ В ПОЛИЦИИ ОН ТЕБЯ ПОСАДИТ!!!!
-    </p>
-    <h3 style="background: white; color: black;">ID: 12345678 (кидать от 1000 голды)</h3>
-  </div>
+    <!-- МАТРИЦА СБОКУ -->
+    <div class="matrix-sidebar">
+        <marquee direction="up" scrollamount="25">
+            101010101 VZLOM 0101010 HACK 0101010 FSB
+        </marquee>
+    </div>
 
-  <br>
-  
-  <button onclick="alert('АХАХХАХА ТЫ ПОВЕЛСЯ ЛОХ ))) ГОНИ ГОЛДУ!!')" style="font-size: 50px; background: gold; border: 15px outset orange; font-family: 'Arial Black';">
-      ЖМИ СЮДА ЧТОБЫ ПОЛУЧИТЬ НОЖ
-  </button>
-  
-  <!-- КНОПКА КОТОРАЯ УБЕГАЕТ -->
-  <br><br><br>
-  <button id="runaway-btn" onmouseover="moveButton()">ПОЖАЛОВАТЬСЯ</button>
-  <br><br><br>
+    <!-- ДОЛГ -->
+    <div class="debt-counter">
+        ДОЛГ: <br> <span id="dolg">0</span> РУБ
+    </div>
 
-  <br><br>
-  <div style="background-color: white; color: black; border: 10px solid blue; width: 70%; text-align: left; padding: 20px;">
-    <h3>ЧАТ (ОНЛАЙН):</h3>
-    <p><b>vvasya2015:</b> тварх ты нуб я тибя выйграл вчера</p>
-    <p style="color: red; font-weight: bold;"><b>TvArH (ADMIN):</b> ЗАТКНИСЬ У МЕНЯ ЛАГАЛ ИНТЕРНЕТ!!!!! ТЫ ЧИТЕР</p>
-    <p><b>nAgIbAtOr_777:</b> классный сайт брат дай админку</p>
-  </div>
+    <!-- СНАЙПЕР (ВЫЛЕЗЕТ ПОСЛЕ РЕКЛАМЫ) -->
+    <div id="SNIPER-SCREEN">
+        <div class="scope-overlay"></div>
+        <div class="sniper-content">
+            <h1 class="blink" style="background: black; color: red;">⚠️ ВЫ ПОД ПРИЦЕЛОМ ⚠️</h1>
+            <h2 style="background: red; color: white;">АЛЬФА УЖЕ ТУТ</h2>
+            <br>
+            <img src="https://media.tenor.com/On7kbMruDtoAAAAM/loading-buffering.gif" width="60">
+            <p style="color: lime; background: black; font-size: 20px;">СКАНИРОВАНИЕ ЛИЦА...</p>
+            <br>
+            <button style="background: lime; font-size: 20px; border: 5px solid white; padding: 10px; margin-bottom: 10px;" onclick="alert('НЕЛЬЗЯ СДАТЬСЯ!!!')">СДАТЬСЯ</button><br>
+            <button style="background: gold; font-size: 20px; border: 5px solid red; padding: 10px;" onclick="hideSniper()">ОТКУПИТЬСЯ (5000р)</button>
+        </div>
+    </div>
 
-  <br><br>
-  <font size="2" style="font-family: Arial;">
-    © 2024 TvArH Production. All rights reserved. <br>
-    Site created by HTML master.
-  </font>
-  <br><br><br>
-</center>
+    <!-- РЕКЛАМА (ВЫЛЕЗЕТ СРАЗУ) -->
+    <div id="POPUP-AD">
+        <div style="background: navy; color: white; text-align: left; padding: 3px;">FATAL_ERROR_404</div>
+        <br>
+        <font color="red" size="5"><b>КУПИ ЭТО БЫСТРО:</b></font><br>
+        <img id="ad-img" src="" style="width: 250px; height: 200px; object-fit: cover;">
+        <p id="ad-text" style="color: black;">Текст...</p>
+        <button onclick="triggerSniper()">[X] ЗАКРЫТЬ</button>
+        <button onclick="alert('НЕТ СРЕДСТВ ЛОХ')">КУПИТЬ</button>
+    </div>
 
-<!-- СКРИПТЫ -->
+    <!-- ТЕЛО САЙТА -->
+    <center>
+        <marquee bgcolor="yellow" style="font-size: 30px; color: purple; border-bottom: 5px solid black;">
+            ВЗЛОМ ПЕНТАГОНА ЗАВЕРШЕН /// Я ВЗЛОМАЛ ТВОЙ ВК /// СКИДЫВАЙ ПАРОЛЬ ОТ СТАНДОФФА
+        </marquee>
+
+        <br>
+        <h1 id="nick">>>> TvArH_PrO <<<</h1>
+        
+        <div style="background: black; color: lime; padding: 5px; border: 2px solid white; font-family: monospace;">
+            STATUS: <span class="blink">HACKED</span><br>
+            IP: 192.168.0.1 (ТВОЙ)<br>
+            ТЕЛЕФОН: IPHONE (ВЗЛОМАН)
+        </div>
+
+        <br>
+
+        <!-- ПАРТНЕРЫ -->
+        <div style="background: white; padding: 10px; width: 95%;">
+            <button style="width: 100%; background: lime; font-size: 20px; font-weight: 900; margin-bottom: 5px;" onclick="alert('ТРОЯН ЗАГРУЖЕН')">СКАЧАТЬ ЧИТ (AIM)</button>
+            <button style="width: 100%; background: magenta; color: white; font-size: 20px; font-weight: 900;" onclick="alert('РОБЛОКС УДАЛЕН')">БЕСПЛАТНЫЕ РОБУКСЫ</button>
+        </div>
+
+        <!-- БИОГРАФИЯ (КЛАССИКА) -->
+        <div class="cringe-block">
+            <p class="krutoy-text" style="font-size: 25px; color: #0f0; background: #000044; border: 3px dashed blue;">Аэы я лблю играт в стэндофф</p>
+            <br>
+            <font size="5" color="white" style="font-family: Arial, sans-serif; font-weight: bold;">
+              Всем привет седня я раскажу пачему я самый крутой в <b>СТАНДОФЕ</b>.<br>
+              во первых у миня КД 0.32 это очнь много (мой друг саня завидует)<br>
+              во вторых у меня есть СКИН КАЛАШ (дефолтный но я наклеел наклейку)!!!!
+            </font>
+        </div>
+
+        <!-- ФОТКИ -->
+        <h2 style="background: yellow; color: black;">ДОКАЗАТЕЛЬСТВА СКИЛЛА:</h2>
+        <div style="background: orange; padding: 10px; width: 95%;">
+            <img src="https://i.ytimg.com/vi/gAGMqD9zuf0/maxresdefault.jpg">
+            <br><b>ЭТО Я ЗДЕЛАЛ ЭЙС</b>
+        </div>
+        <br>
+        <div style="background: grey; padding: 10px; width: 95%;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg">
+            <br><b>Тут фотка с прессом не грузит</b>
+        </div>
+
+        <!-- КЛИКЕР -->
+        <div class="cringe-block" style="background: purple;">
+            <h2 style="color: yellow;">ФАРМ ГОЛДЫ</h2>
+            <div onclick="clickGold()" style="width: 100px; height: 100px; background: gold; border-radius: 50%; border: 5px dashed red; margin: auto; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer;">
+                G
+            </div>
+            <p>БАЛАНС: <span id="gold-balance">0</span> G</p>
+        </div>
+
+        <!-- ЖИВОЙ ЧАТ -->
+        <div class="cringe-block" style="background: white; color: black; text-align: left;">
+            <h3>LIVE CHAT:</h3>
+            <div id="chat-box" style="height: 150px; overflow-y: scroll; border: 2px solid black; background: #eee; font-size: 14px; font-family: Arial;">
+                <b>Admin:</b> КТО ТУТ?<br>
+            </div>
+            <br>
+            <input type="text" placeholder="пиши сюда..." style="width: 60%; font-size: 16px;">
+            <button onclick="alert('ТЫ В МУТЕ ЗА СПАМ!!!')" style="font-size: 16px;">ОТПР.</button>
+        </div>
+        
+        <!-- БЕГАЮЩАЯ КНОПКА -->
+        <button id="runaway-btn" onmouseover="moveButton()" ontouchstart="moveButton()" onclick="alert('АХАХАХ ЛОХ НЕ ПОЙМАЛ')">ПОЖАЛОВАТЬСЯ</button>
+
+        <br><br><br>
+        <font size="2">created by Tvarh (c) 2013-2025</font>
+    </center>
+</div>
+
 <script>
-  // 1. НАСТРОЙКА РЕКЛАМЫ (Рандом)
-  var images = [
-      "https://animals.pibig.info/uploads/posts/2023-03/1680289207_animals-pibig-info-p-tupaiya-zhivotnoe-zhivotnie-pinterest-1.jpg",
-      "https://i.pinimg.com/736x/25/a3/d1/25a3d13a3505fe60db1a61f8813f49ac.jpg",
-      "https://www.meme-arsenal.com/memes/3aa3b8e43f2ffcaaa4f36b1733af7a6d.jpg"
-  ];
-  var texts = [
-      "ПРОДАМ КРЫСУ-УБИЙЦУ (Б/У)",
-      "ОТДАМ ЭТОГО ЧЕЛА В ДОБРЫЕ РУКИ",
-      "ОБЕЗЬЯНА АБУ БАНДИТ (ОРИГИНАЛ)"
-  ];
+  // === 1. ЛОГИКА ИНТРО (STOP) ===
+  function startIntro() {
+      // Через 100мс начинаем анимацию
+      setTimeout(function() {
+          document.getElementById('stop-img').classList.add('zoom-active');
+      }, 100);
 
-  function siteLoad() {
-      // Запускаем рекламу через 1.5 сек
-      setTimeout(showAd, 1500);
-      // Запускаем взлом
-      startHack();
+      // Через 2.5 секунды убираем стоп и показываем колесо
+      setTimeout(function() {
+          document.getElementById('INTRO-SCREEN').style.display = 'none';
+          document.getElementById('WHEEL-OVERLAY').style.display = 'flex';
+      }, 2500);
   }
 
+  // === 2. ЛОГИКА КОЛЕСА ===
+  function spinWheel() {
+      var wheel = document.getElementById('theWheel');
+      var btn = document.getElementById('spinBtn');
+      btn.disabled = true; 
+      btn.innerHTML = "КРУТИМ...";
+
+      // ШАНС 50/50
+      var isLucky = Math.random() > 0.5; 
+      
+      var baseSpin = 360 * 10; // 10 оборотов
+      var resultDeg = 0;
+
+      if(isLucky) {
+          // Зеленый (Вход) - примерно 200-340 град
+          resultDeg = Math.floor(Math.random() * 140) + 200; 
+      } else {
+          // Красный (Бан) - примерно 20-160 град
+          resultDeg = Math.floor(Math.random() * 140) + 20;
+      }
+
+      var totalDeg = baseSpin + resultDeg;
+      wheel.style.transform = "rotate(" + totalDeg + "deg)";
+
+      // Ждем 4 сек
+      setTimeout(function() {
+          document.getElementById('WHEEL-OVERLAY').style.display = 'none';
+          
+          if(isLucky) {
+              // ПУСКАЕМ НА САЙТ
+              alert("ДОСТУП РАЗРЕШЕН... ГОТОВЬСЯ");
+              document.getElementById('MAIN-SITE').style.display = 'block';
+              startChaos(); 
+          } else {
+              // КИДАЕМ В ПОМОЙКУ
+              document.getElementById('TRASH-SCREEN').style.display = 'block';
+              setInterval(function(){ alert("ТЫ В ПОМОЙКЕ АХАХАХ"); }, 3000);
+          }
+      }, 4000);
+  }
+
+  // === 3. ЛОГИКА ХАОСА ===
+  function startChaos() {
+      setTimeout(showAd, 1500); // Реклама вылезет через 1.5 сек
+      startDebt(); 
+      startChat(); 
+      startCursorTrail();
+  }
+
+  // Реклама
+  var ads = [
+      {src: "https://animals.pibig.info/uploads/posts/2023-03/1680289207_animals-pibig-info-p-tupaiya-zhivotnoe-zhivotnie-pinterest-1.jpg", txt: "КРЫСА УБИЙЦА"},
+      {src: "https://i.pinimg.com/736x/25/a3/d1/25a3d13a3505fe60db1a61f8813f49ac.jpg", txt: "УРОД БЕСПЛАТНО"},
+      {src: "https://www.meme-arsenal.com/memes/3aa3b8e43f2ffcaaa4f36b1733af7a6d.jpg", txt: "ОБЕЗЬЯНА АБУ"}
+  ];
   function showAd() {
-      var rand = Math.floor(Math.random() * images.length);
-      document.getElementById('ad-img-placer').src = images[rand];
-      document.getElementById('ad-text-placer').innerHTML = texts[rand];
+      var r = ads[Math.floor(Math.random() * ads.length)];
+      document.getElementById('ad-img').src = r.src;
+      document.getElementById('ad-text').innerHTML = r.txt;
       document.getElementById('POPUP-AD').style.display = 'block';
   }
 
-  function closeAd() {
-      var pass = prompt("ВВЕДИ ПАРОЛЬ ЧТОБЫ ЗАКРЫТЬ (я лох)");
-      if(pass === "я лох" || pass === "Я ЛОХ") {
-          document.getElementById('POPUP-AD').style.display = 'none';
-          alert("ДОСТУП РАЗРЕШЕН! (ЛОХ)");
+  // Снайпер (после рекламы)
+  function triggerSniper() {
+      document.getElementById('POPUP-AD').style.display = 'none';
+      setTimeout(function() {
+          document.getElementById('SNIPER-SCREEN').style.display = 'block';
+          alert("СТОЯТЬ!!!! РАБОТАЕТ СПЕЦНАЗ!!!!");
+      }, 500);
+  }
+  function hideSniper() {
+      if(confirm("СКИДЫВАЕШЬ ДЕНЬГИ??")) {
+          alert("ОПЛАТА НЕ ПРОШЛА... АХАХА ЛОХ");
+          document.getElementById('SNIPER-SCREEN').style.display = 'none';
       } else {
-          alert("ПАРОЛЬ НЕВЕРНЫЙ!! КОМПЬЮТЕР БУДЕТ УНИЧТОЖЕН ЧЕРЕЗ 3... 2... 1...");
+          alert("НУ ВСЕ ЖДИ ГОСТЕЙ");
+          document.body.style.animation = "shake 0.1s infinite";
       }
   }
 
-  // 2. СЛЕД ЗА МЫШКОЙ (Желтые квадраты)
-  document.addEventListener('mousemove', function(e) {
-      var trail = document.createElement('div');
-      trail.className = 'trail';
-      trail.style.left = e.pageX + 'px';
-      trail.style.top = e.pageY + 'px';
-      document.body.appendChild(trail);
-      
-      // Удаляем след через 0.3 сек
-      setTimeout(function() {
-          trail.remove();
-      }, 300);
-  });
+  // ЧАТ (ТВОИ ФРАЗЫ)
+  var messages = ["мамка дома?", "Тварх топ", "дай голды пж", "я читер", "го дуэль", "ты нуб", "мамку в кино водил"];
+  var names = ["Nagibator228", "Mamkin_Hacker", "TvArH_FAN", "Standoffer_007", "Kaban"];
   
-  // Добавляем звук клика (бесячий)
-  document.addEventListener('mousedown', function() {
-      // Воспроизводит системный звук ошибки в голове пользователя, потому что реальный звук браузер блочит
-      console.log("PUK");
-  });
+  function startChat() {
+      setInterval(function() {
+          var chat = document.getElementById('chat-box');
+          var name = names[Math.floor(Math.random()*names.length)];
+          var msg = messages[Math.floor(Math.random()*messages.length)];
+          
+          // Рандомный цвет ников
+          var color = Math.random() > 0.5 ? "blue" : "red";
+          
+          chat.innerHTML += "<span style='color:"+color+"'><b>"+name+":</b></span> " + msg + "<br>";
+          chat.scrollTop = chat.scrollHeight; 
+      }, 1500);
+  }
 
-  // 3. БЕГУЩАЯ КНОПКА
+  // Долг
+  var d = 0;
+  function startDebt() {
+      setInterval(function() { d+=500; document.getElementById('dolg').innerText = d; }, 200);
+  }
+
+  // Кликер
+  var gold = 0;
+  function clickGold() {
+      gold++;
+      document.getElementById('gold-balance').innerText = gold;
+      if(gold == 10) alert("НЕ СЛОМАЙ ЭКРАН!!!");
+  }
+
+  // Бегающая кнопка
   function moveButton() {
       var btn = document.getElementById('runaway-btn');
-      var x = Math.random() * (window.innerWidth - 200);
-      var y = Math.random() * (window.innerHeight - 200) + window.scrollY;
+      var x = Math.random() * (window.innerWidth - 150);
+      var y = Math.random() * (window.innerHeight - 100);
       btn.style.left = x + 'px';
       btn.style.top = y + 'px';
   }
 
-  // 4. ФЕЙК ВЗЛОМ (Бесконечный)
-  var progress = 0;
-  function startHack() {
-      setInterval(function() {
-          if(progress < 100) {
-              progress += 2; // Быстрее
-              document.getElementById('progress').style.width = progress + '%';
-              // Случайные надписи хакера
-              var hackLogs = ["взлом жопы...", "скачивание голды...", "удаление виндовс...", "подбор пароля..."];
-              document.getElementById('hack-text').innerHTML = hackLogs[Math.floor(Math.random()*hackLogs.length)] + " " + progress + "%";
-          } else {
-             progress = 0; // Начинаем заново чтобы бесить
-          }
-      }, 150);
+  // След
+  function startCursorTrail() {
+      document.addEventListener('mousemove', function(e) {
+          var t = document.createElement('div');
+          t.className = 'trail';
+          t.style.left = e.pageX + 'px'; t.style.top = e.pageY + 'px';
+          document.body.appendChild(t);
+          setTimeout(function(){ t.remove() }, 300);
+      });
   }
-
-  // 5. МИГАНИЕ ЗАГОЛОВКА
-  setInterval(function() {
-    var titles = ["ВЗЛОМ", "ОШИБКА", "TvArH", "ГОЛДА"];
-    document.title = ">>> " + titles[Math.floor(Math.random() * titles.length)] + " <<<";
-  }, 200);
+  
+  // Тайтл
+  setInterval(function() { document.title = Math.random()>0.5 ? "ВЗЛОМ!!!" : "TvArH 2025"; }, 500);
 
 </script>
 
