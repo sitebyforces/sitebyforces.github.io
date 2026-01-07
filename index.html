@@ -1,421 +1,317 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            overflow: hidden;
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TvArH_PrO_2013 OFFICIAL PAGE</title>
+<style>
+  /* === ТЕХНИЧЕСКИЙ АД === */
+  * {
+    cursor: url('https://cdn-icons-png.flaticon.com/512/62/62808.png'), crosshair; /* Курсор прицел */
+  }
+  
+  body {
+    background-color: #0000ff; /* Синий смерти */
+    color: #ff0000; /* Кровь из глаз */
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    overflow-x: hidden;
+    user-select: none; /* ЗАПРЕТ ВЫДЕЛЕНИЯ ТЕКСТА (ЧТОБ НЕ УКРАЛИ) */
+  }
 
-        /* --- СЛОИ ДЛЯ ФИНАЛА --- */
-        
-        /* 1. Основной черный фон */
-        #blackout-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 9998;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0s; /* Мгновенно */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  /* СЛЕД ЗА МЫШКОЙ */
+  .trail {
+    position: absolute;
+    height: 10px; width: 10px;
+    border-radius: 5px;
+    background: lime;
+    pointer-events: none;
+    font-size: 10px;
+    color: yellow;
+  }
 
-        /* 2. Слой мигания (Помехи) */
-        #flicker-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 9999; /* Поверх текста */
-            opacity: 0;
-            pointer-events: none;
-            /* Добавил очень быстрый переход, чтобы смягчить удар по глазам */
-            transition: opacity 0.05s ease-in-out; 
-            will-change: opacity;
-        }
+  h1 {
+    font-size: 80px;
+    text-shadow: 5px 5px 0px yellow;
+    animation: shake 0.5s infinite;
+  }
 
-        .philosophy-text {
-            color: #ccc;
-            font-family: 'VT323', monospace;
-            font-size: 28px;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            max-width: 600px;
-            line-height: 1.6;
-            letter-spacing: 1px;
-            position: relative; 
-        }
+  .block-cringe {
+    border: 15px ridge #00ff00; /* Рамка в стиле Win95 но кислотная */
+    background-color: #000000;
+    margin: 20px;
+    padding: 10px;
+    box-shadow: 10px 10px 0px red;
+  }
 
-        .wrong-word {
-            color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
-            display: inline-block;
-            font-weight: bold;
-            font-size: 32px; 
-        }
-        
-        @keyframes shake-word {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(2px, -1px); }
-            50% { transform: translate(-2px, 1px); }
-            75% { transform: translate(1px, 2px); }
-            100% { transform: translate(0, 0); }
-        }
-        .shaking {
-            animation: shake-word 0.08s infinite;
-        }
+  .krutoy-text {
+    font-size: 40px;
+    color: #00ff00;
+    background: pink;
+    border: 3px dashed blue;
+  }
 
-        /* --- КАПЧА --- */
-        .captcha-box {
-            background: #fff;
-            border: 1px solid #d3d3d3;
-            width: 380px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
-        }
+  img {
+    border: 5px solid red;
+    max-width: 90%;
+  }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+  /* СТИЛИ ДЛЯ ОКНА РЕКЛАМЫ (WINDOWS 98 STYLE) */
+  #POPUP-AD {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: #c0c0c0;
+    border: 4px outset white;
+    box-shadow: 20px 20px 0px black;
+    z-index: 999999;
+    display: none; /* Скрыто, пока JS не включит */
+    text-align: center;
+    padding: 5px;
+  }
+  
+  .win-header {
+    background: darkblue;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    text-align: left;
+    font-family: Arial, sans-serif;
+  }
 
-        .checkbox-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            padding: 5px;
-        }
-        
-        .checkbox {
-            width: 24px; height: 24px;
-            border: 2px solid #c1c1c1;
-            background: #fff;
-            position: relative;
-        }
+  .ad-content img {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+    border: 3px inset gray;
+  }
 
-        .label { color: #333; font-size: 14px; }
-        .logo-col { text-align: center; opacity: 0.6; transform: scale(0.9); }
-        .logo-img { width: 32px; height: 32px; background-image: url('https://www.gstatic.com/recaptcha/api2/logo_48.png'); background-size: cover; margin: 0 auto; }
-        .logo-text { font-size: 10px; color: #555; }
+  /* БЕГУЩАЯ КНОПКА */
+  #runaway-btn {
+    position: absolute;
+    font-size: 20px;
+    background: red;
+    color: white;
+  }
 
-        /* --- ИГРОВАЯ ЗОНА --- */
-        .game-wrapper {
-            height: 0;
-            overflow: hidden;
-            background: #050505;
-            margin-top: 0;
-            position: relative;
-            transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+  /* ФЕЙК ЗАГРУЗКА */
+  .virus-bar {
+    width: 100%;
+    background: grey;
+    border: 2px solid white;
+    height: 30px;
+  }
+  .virus-progress {
+    height: 100%;
+    background: lime;
+    width: 1%;
+    transition: width 0.5s;
+  }
 
-        .game-wrapper.active {
-            height: 400px;
-            margin-top: 10px;
-            border: 2px solid #222;
-        }
-
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            cursor: default;
-            image-rendering: pixelated;
-        }
-
-        .scanlines {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 3px;
-            pointer-events: none;
-            z-index: 20;
-            opacity: 0.5;
-        }
-
-        .hint-text {
-            position: absolute;
-            top: 15px;
-            width: 100%;
-            text-align: center;
-            font-family: 'VT323', monospace;
-            color: #555;
-            font-size: 24px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s;
-            text-shadow: 0 0 5px #000;
-        }
-
-    </style>
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    50% { transform: translate(-3px, 0px) rotate(1deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+</style>
 </head>
-<body>
 
-    <!-- Слои для финала -->
-    <div id="blackout-layer">
-        <div class="philosophy-text" id="endText"></div>
+<!-- ЗАПРЕТ ПРАВОЙ КНОПКИ МЫШИ -->
+<body oncontextmenu="alert('ЭЭЭ КУДА ЖМЕШЬ КОПИРОВАТЬ НЕЛЬЗЯ АВТОРСКИЕ ПРАВА!!'); return false;" onload="siteLoad()">
+
+<!-- === ВСПЛЫВАЮЩЕЕ ОКНО РЕКЛАМЫ === -->
+<div id="POPUP-AD">
+    <div class="win-header">
+        Internet Explorer: ВНИМАНИЕ ВИРУС!!!
     </div>
-    <div id="flicker-layer"></div>
-
-    <!-- Капча -->
-    <div class="captcha-box" id="captchaBox">
-        <div class="header">
-            <div class="checkbox-row" id="activateBtn">
-                <div class="checkbox" id="checkbox"></div>
-                <div class="label" id="mainLabel">I'm not a robot</div>
-            </div>
-            <div class="logo-col">
-                <div class="logo-img"></div>
-                <div class="logo-text">reCAPTCHA</div>
-            </div>
-        </div>
-
-        <div class="game-wrapper" id="gameWrapper">
-            <div class="scanlines"></div>
-            <canvas id="gameCanvas" width="380" height="400"></canvas>
-            <div class="hint-text" id="hintText"></div>
-        </div>
+    <div class="ad-content">
+        <br>
+        <font color="red" size="5"><b>ПОКУПАЙ БЫСТРО!!!</b></font><br>
+        
+        <!-- СЮДА СКРИПТ ВСТАВИТ РАНДОМ ФОТКУ -->
+        <img id="ad-img-placer" src="">
+        
+        <p id="ad-text-placer" style="font-weight: bold;">Текст...</p>
+        
+        <button style="width: 100px; height: 30px;" onclick="closeAd()">[X] закрыть</button>
+        <button style="width: 100px; height: 30px;" onclick="alert('СПАСИБО ЗА ПОКУПКУ ЛОХ')">КУПИТЬ</button>
     </div>
+</div>
+<!-- ================================= -->
 
+<center>
+  <!-- 3 ШТУКИ MARQUEE ДЛЯ МАКСИМАЛЬНОЙ НАГРУЗКИ НА ГЛАЗА -->
+  <marquee scrollamount="25" bgcolor="yellow" style="font-size: 50px; color: purple; font-weight: bold;">
+    ПОДПИШИСЬ НА МОЙ КАНАЛ TVARH_OFFICIAL ИНАЧЕ Я НАЙДУ ТЕБЯ ПО АЙПИ!!!!11! РАЗДАЧА ГОЛДЫ ЗАВТРА!!!
+  </marquee>
+  
+  <h1 id="nick">>>> TvArH PrO <<<</h1>
+  <h2>КИБЕРСПОРТСМЕН / СНАЙПЕР / ВЗЛОМЩИК</h2>
+
+  <!-- СЕКЦИЯ БАННЕРОВ -->
+  <div style="background: white; padding: 10px;">
+    <font color="black">ПАРТНЕРЫ:</font><br>
+    <button style="background:lime; font-size: 20px;" onclick="alert('ВИРУС.ЕХЕ ЗАПУЩЕН')">СКАЧАТЬ ЧИТ (100% РАБОТАЕТ)</button>
+    <button style="background:magenta; font-size: 20px;" onclick="alert('МАЙНКРАФТ УДАЛЕН')">БЕСПЛАТНЫЕ АЛМАЗЫ</button>
+  </div>
+
+  <br>
+  
+  <div class="block-cringe">
+    <p class="krutoy-text">Аэы я лблю играт в стэндофф</p>
+    <br>
+    <font size="6" color="white">
+      Всем привет седня я раскажу пачему я самый крутой в <b>СТАНДОФЕ</b>.<br>
+      во первых у миня КД 0.32 это очнь много (мой друг саня завидует) <br>
+      во вторых у меня есть СКИН КАЛАШ (дефолтный но я наклеел наклейку)!!!!
+    </font>
+    
+    <br><br>
+    <!-- ФЕЙК ЗАГРУЗКА -->
+    <font color="red">ВЗЛОМ ПЕНТАГОНА:</font>
+    <div class="virus-bar">
+        <div id="progress" class="virus-progress"></div>
+    </div>
+    <div id="hack-text">подключение...</div>
+  </div>
+
+  <h1>МОИ ФОТКИ (РЕАЛ)</h1>
+  
+  <!-- ФОТКА 1: СТАНДОФФ -->
+  <img src="https://i.ytimg.com/vi/gAGMqD9zuf0/maxresdefault.jpg" alt="тут кароч я с авм">
+  <br>
+  <font size="20px" face="Impact" color="yellow" style="background:red;">ЭТО Я ЗДЕЛАЛ ЭЙС НО ЗАПИСЬ НЕ ВКЛЮЧИЛАСЬ ((</font>
+  
+  <br><br>
+  
+  <!-- ФОТКА 2: НЕТ КАРТИНКИ -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="сломалось">
+  <p>тут была моя фотка с прессом но хейтеры удалили</p>
+  
+  <br><br>
+  
+  <!-- ФОТКА 3: СТАНДОФФ -->
+  <img src="https://i.ytimg.com/vi/3E1Zxz1lnuc/maxresdefault.jpg" alt="я убил нуба">
+  <p>Ета я унизил школьника в дуэле на диглах он плакал потом ахахах )))0)0)</p>
+
+  <div class="block-cringe" style="background: red;">
+    <h2>!! ВАЖНО ЧИТАТЬ !!</h2>
+    <p style="font-size: 30px; color: black;">
+      ЕСЛИ ТЫ НЕ СКИНИШЬ МНЕ ГОЛДУ ПРЯМО ЩАС <br>
+      Я ВЫЧИСЛЮ ТВОЙ АДРЕС <br>
+      МОЙ БАТЯ ХАКЕР В МАЙКРОСОФТ ОН ТЕБЯ ЗАБАНИТ!!!!
+    </p>
+    <h3>МОЙ ID: 12345678 (скинте нож пжпжпж бабочку легаси)</h3>
+  </div>
+
+  <br>
+  
+  <button onclick="alert('АХАХХАХА ТЫ ПОВЕЛСЯ ЛОХ ))) ГОНИ ГОЛДУ!!')" style="font-size: 50px; background: gold; border: 10px outset orange;">
+      ЖМИ СЮДА ЧТОБЫ ПОЛУЧИТЬ НОЖ БЕСПЛАТНО
+  </button>
+  
+  <!-- КНОПКА КОТОРАЯ УБЕГАЕТ -->
+  <br><br><br>
+  <button id="runaway-btn" onmouseover="moveButton()">ПОЖАЛОВАТЬСЯ НА САЙТ</button>
+  <br><br><br>
+
+  <br><br>
+  <div style="background-color: white; color: black;">
+    <h3>каменты:</h3>
+    <b>vvasya2015:</b> тварх ты нуб я тибя выйграл вчера <br>
+    <b>TvArH (админ):</b> ЗАТКНИСЬ ЭТО БЫЛ НЕ Я У МЕНЯ ПИНГ ЛАГАЛ!!!!! ТЫ ЧИТЕР <br>
+    <b>nAgIbAtOr_777:</b> классный сайт брат уважуха
+  </div>
+
+  <br><br>
+  <font size="1">
+    сайт создал TvArH 2024 © копирование запрещено иначи суд
+  </font>
+</center>
+
+<!-- СКРИПТЫ ДЛЯ ТЕХНИЧЕСКОГО ГОВНА -->
 <script>
-    const activateBtn = document.getElementById('activateBtn');
-    const gameWrapper = document.getElementById('gameWrapper');
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const hintText = document.getElementById('hintText');
-    const blackoutLayer = document.getElementById('blackout-layer');
-    const flickerLayer = document.getElementById('flicker-layer');
-    const endText = document.getElementById('endText');
+  // 1. НАСТРОЙКА РЕКЛАМЫ (Рандом)
+  var images = [
+      "https://animals.pibig.info/uploads/posts/2023-03/1680289207_animals-pibig-info-p-tupaiya-zhivotnoe-zhivotnie-pinterest-1.jpg",
+      "https://i.pinimg.com/736x/25/a3/d1/25a3d13a3505fe60db1a61f8813f49ac.jpg",
+      "https://www.meme-arsenal.com/memes/3aa3b8e43f2ffcaaa4f36b1733af7a6d.jpg"
+  ];
+  var texts = [
+      "КУПИ КРЫСУ БОЙЦА (300 РУБ)",
+      "ОТДАМ УРОДА БЕСПЛАТНО",
+      "ОБЕЗЬЯНА АБУ (ТОЛЬКО ДЛЯ ПАЦАНОВ)"
+  ];
 
-    let gameState = 'IDLE';
-    let frames = 0;
-    
-    // Config
-    const COLS = 3;
-    const ROWS = 3;
-    const SIZE = 40;
-    const GAP = 40;
-    
-    let cubes = [];
-    let targetId = -1;
-    let rotation = 0;
-    let targetRotation = 0;
-    let flickerInterval = null;
+  function siteLoad() {
+      // Запускаем рекламу через 2 сек
+      setTimeout(showAd, 2000);
+      // Запускаем взлом
+      startHack();
+  }
 
-    // --- Activation ---
-    activateBtn.addEventListener('click', () => {
-        if (gameState !== 'IDLE') return;
-        
-        gameWrapper.classList.add('active');
-        
-        setTimeout(() => {
-            initGame();
-        }, 800);
-    });
+  function showAd() {
+      var rand = Math.floor(Math.random() * images.length);
+      document.getElementById('ad-img-placer').src = images[rand];
+      document.getElementById('ad-text-placer').innerHTML = texts[rand];
+      document.getElementById('POPUP-AD').style.display = 'block';
+  }
 
-    function initGame() {
-        gameState = 'MEMORIZE';
-        frames = 0;
-        rotation = 0;
-        targetRotation = 0;
-        cubes = [];
-        
-        const gridW = COLS * SIZE + (COLS - 1) * GAP;
-        const gridH = ROWS * SIZE + (ROWS - 1) * GAP;
-        const startX = (canvas.width - gridW) / 2;
-        const startY = (canvas.height - gridH) / 2;
+  function closeAd() {
+      var pass = prompt("ВВЕДИ ПАРОЛЬ ЧТОБЫ ЗАКРЫТЬ (я лох)");
+      if(pass == "я лох") {
+          document.getElementById('POPUP-AD').style.display = 'none';
+          alert("МОЛОДЕЦ! ТЕПЕРЬ ТЫ ОФИЦИАЛЬНО ЛОХ!");
+      } else {
+          alert("НЕПРАВИЛЬНО!! РЕКЛАМА НЕ УЙДЕТ!!");
+      }
+  }
 
-        let id = 0;
-        for(let r=0; r<ROWS; r++) {
-            for(let c=0; c<COLS; c++) {
-                cubes.push({
-                    id: id++,
-                    x: startX + c*(SIZE+GAP),
-                    y: startY + r*(SIZE+GAP),
-                    tx: startX + c*(SIZE+GAP),
-                    ty: startY + r*(SIZE+GAP),
-                    color: '#888'
-                });
-            }
-        }
+  // 2. СЛЕД ЗА МЫШКОЙ (Тормозит сайт специально)
+  document.addEventListener('mousemove', function(e) {
+      var trail = document.createElement('div');
+      trail.className = 'trail';
+      trail.style.left = e.pageX + 'px';
+      trail.style.top = e.pageY + 'px';
+      trail.innerHTML = "TvArH";
+      document.body.appendChild(trail);
+      
+      // Удаляем след через 0.5 сек
+      setTimeout(function() {
+          trail.remove();
+      }, 500);
+  });
 
-        targetId = Math.floor(Math.random() * cubes.length);
-        
-        hintText.innerText = "MEMORIZE";
-        hintText.style.opacity = 1;
+  // 3. БЕГУЩАЯ КНОПКА
+  function moveButton() {
+      var btn = document.getElementById('runaway-btn');
+      var x = Math.random() * (window.innerWidth - 100);
+      var y = Math.random() * (window.innerHeight - 100) + window.scrollY; // Учитываем скролл
+      btn.style.left = x + 'px';
+      btn.style.top = y + 'px';
+  }
 
-        loop();
-    }
+  // 4. ФЕЙК ВЗЛОМ
+  var progress = 0;
+  function startHack() {
+      setInterval(function() {
+          if(progress < 100) {
+              progress++;
+              document.getElementById('progress').style.width = progress + '%';
+              document.getElementById('hack-text').innerHTML = "ВЗЛОМ ЖОПЫ: " + progress + "%";
+          } else {
+             document.getElementById('hack-text').innerHTML = "ВЗЛОМ УСПЕШЕН (СКИДЫВАЙ ГОЛДУ)";
+             document.getElementById('progress').style.background = "red";
+          }
+      }, 100);
+  }
 
-    function loop() {
-        if (gameState === 'ENDING') return;
-        requestAnimationFrame(loop);
-        
-        ctx.fillStyle = "#080808";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        frames++;
-
-        if (gameState === 'MEMORIZE') {
-            if (Math.floor(frames / 10) % 2 === 0) cubes[targetId].color = '#ffffff';
-            else cubes[targetId].color = '#444444';
-
-            if (frames > 120) {
-                gameState = 'SHUFFLE';
-                hintText.style.opacity = 0;
-                cubes.forEach(c => c.color = '#aaaaaa');
-            }
-        }
-
-        if (gameState === 'SHUFFLE') {
-            if (frames % 6 === 0) {
-                let a = Math.floor(Math.random() * cubes.length);
-                let b = Math.floor(Math.random() * cubes.length);
-                let tempX = cubes[a].tx; let tempY = cubes[a].ty;
-                cubes[a].tx = cubes[b].tx; cubes[a].ty = cubes[b].ty;
-                cubes[b].tx = tempX; cubes[b].ty = tempY;
-            }
-
-            if (frames % 50 === 0) {
-                let dir = Math.random() > 0.5 ? 1 : -1;
-                targetRotation += (Math.PI / 2) * dir;
-            }
-
-            rotation += (targetRotation - rotation) * 0.15;
-
-            if (frames > 400) {
-                gameState = 'PICK';
-                targetRotation = Math.round(targetRotation / (Math.PI/2)) * (Math.PI/2);
-                canvas.style.cursor = 'pointer';
-                hintText.innerText = "CHOOSE";
-                hintText.style.opacity = 1;
-            }
-        }
-
-        if (gameState === 'PICK') {
-            rotation += (targetRotation - rotation) * 0.2;
-            cubes.forEach(c => {
-                c.shakeX = (Math.random() - 0.5) * 4;
-                c.shakeY = (Math.random() - 0.5) * 4;
-                c.color = '#ffffff';
-            });
-        }
-
-        // --- Drawing ---
-        ctx.save();
-        ctx.translate(canvas.width/2, canvas.height/2);
-        ctx.rotate(rotation);
-        ctx.translate(-canvas.width/2, -canvas.height/2);
-
-        cubes.forEach(c => {
-            c.x += (c.tx - c.x) * 0.25;
-            c.y += (c.ty - c.y) * 0.25;
-            
-            let drawX = c.x + (c.shakeX || 0);
-            let drawY = c.y + (c.shakeY || 0);
-
-            ctx.fillStyle = c.color;
-            ctx.fillRect(drawX, drawY, SIZE, SIZE);
-        });
-        ctx.restore();
-    }
-
-    // --- Final Sequence ---
-    canvas.addEventListener('mousedown', () => {
-        if (gameState === 'PICK') {
-            triggerEnding();
-        }
-    });
-
-    async function triggerEnding() {
-        gameState = 'ENDING';
-        
-        // 1. МГНОВЕННЫЙ BLACKOUT
-        blackoutLayer.style.pointerEvents = 'all';
-        blackoutLayer.style.opacity = 1;
-        
-        // Запуск МЯГКОГО мигания (0.15 opacity)
-        startFlicker();
-
-        // 2. Сценарий текста
-        await wait(2000);
-        await showPhrase("Why are you wasting your time?");
-        
-        await wait(5000); 
-        await showPhrase("What do you expect to see here?");
-        
-        await wait(5000);
-        await showPhrase("(silence)");
-        
-        await wait(3000);
-        // Маленькие буквы wrong + тряска
-        endText.style.opacity = 0;
-        await wait(500);
-        endText.innerHTML = "You chose the <span class='wrong-word shaking'>wrong</span> cube.";
-        endText.style.opacity = 1;
-        
-        await wait(6000);
-        await showPhrase("Wake up.");
-        
-        await wait(4000);
-        
-        // Медленное угасание текста
-        endText.style.transition = 'opacity 5s';
-        endText.style.opacity = 0;
-
-        await wait(5000); 
-        stopFlicker();
-    }
-
-    function showPhrase(text) {
-        return new Promise(resolve => {
-            endText.style.opacity = 0;
-            setTimeout(() => {
-                endText.innerHTML = text;
-                endText.style.opacity = 1;
-                resolve();
-            }, 1500);
-        });
-    }
-
-    function startFlicker() {
-        flickerInterval = setInterval(() => {
-            // Если сейчас 0, ставим 0.15 (15% черного), иначе 0.
-            // Это очень легкое потемнение, не режущее глаза.
-            if (flickerLayer.style.opacity > 0) {
-                flickerLayer.style.opacity = 0;
-            } else {
-                flickerLayer.style.opacity = 0.25; 
-            }
-        }, 80); // Чуть медленнее, 80мс
-    }
-
-    function stopFlicker() {
-        clearInterval(flickerInterval);
-        flickerLayer.style.opacity = 0;
-    }
-
-    function wait(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+  // 5. МИГАНИЕ ЗАГОЛОВКА
+  setInterval(function() {
+    document.title = Math.random() > 0.5 ? "ВЗЛОМ!!!" : "TvArH 2013";
+  }, 200);
 
 </script>
+
 </body>
 </html>
